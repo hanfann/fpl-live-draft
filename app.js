@@ -449,6 +449,16 @@
       if (controller.signal.aborted) return;
       try {
         await loadAndRender(leagueId);
+        
+        // Track successful league load
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'league_loaded', {
+            event_category: 'engagement',
+            event_label: 'successful_load',
+            value: 1
+          });
+        }
+        
         setStatus(''); // Hide status on success
       } catch (err) {
         console.error(err);
@@ -486,6 +496,16 @@
       setStatus('Please enter a valid numeric league id', 'error');
       return;
     }
+    
+    // Track league ID submission
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'league_search', {
+        event_category: 'engagement',
+        event_label: 'start_tracking_click',
+        value: 1
+      });
+    }
+    
     setStatus('Loading...');
     startPolling(value);
   });
@@ -804,16 +824,44 @@
 
   // Export button event listeners
   if (exportBtn) {
-    exportBtn.addEventListener('click', () => exportDraftResults(false));
+    exportBtn.addEventListener('click', () => {
+      // Track export event
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'export_data', {
+          event_category: 'engagement',
+          event_label: 'export_regular',
+          value: 1
+        });
+      }
+      exportDraftResults(false);
+    });
   }
   
   if (exportAnonymousBtn) {
-    exportAnonymousBtn.addEventListener('click', () => exportDraftResults(true));
+    exportAnonymousBtn.addEventListener('click', () => {
+      // Track anonymous export event
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'export_data', {
+          event_category: 'engagement',
+          event_label: 'export_anonymous',
+          value: 1
+        });
+      }
+      exportDraftResults(true);
+    });
   }
 
   // Instructions popup event listeners
   if (instructionsBtn) {
     instructionsBtn.addEventListener('click', () => {
+      // Track instructions popup open
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'instructions_opened', {
+          event_category: 'engagement',
+          event_label: 'find_league_id_click',
+          value: 1
+        });
+      }
       instructionsPopup.classList.remove('hidden');
       // Populate with placeholder content for now
       const content = document.getElementById('instructions-content');
