@@ -3,63 +3,95 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FPL Draft Live Tracker</title>
+    <title>FPL Live Draft Room Tracker</title>
     <meta name="color-scheme" content="light dark" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header class="app-header">
-      <div class="header-inner">
-        <div class="header-left"></div>
-        <div class="header-center">
-          <h1>FPL Draft Live Tracker</h1>
-          <p class="subtitle">Enter your Draft League ID to watch picks update live</p>
-        </div>
-        <div class="header-right">
-          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
-        </div>
-      </div>
-    </header>
-
-    <main class="app-main">
-      <section class="hero">
-        <div class="controls">
-          <form id="league-form" autocomplete="off">
-            <label for="league-id-input">League ID</label>
-            <input id="league-id-input" name="leagueId" type="number" inputmode="numeric" placeholder="e.g. 71675" required />
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+        
+        <div class="header-content">
+          <!-- 1. Header -->
+          <h1>FPL Live Draft Room Tracker</h1>
+          
+          <!-- 2. Instructions Link -->
+          <p class="instructions">
+            Input your League ID. 
+            <button id="instructions-btn" class="instructions-link">Find your League ID here</button>
+          </p>
+          
+          <!-- 3. Input Field and Submit Button -->
+          <form id="league-form" class="input-form" autocomplete="off">
+            <input id="league-id-input" name="leagueId" type="number" inputmode="numeric" placeholder="e.g., 123456" required />
             <button type="submit" class="cta">Start Tracking</button>
           </form>
+          
           <p id="status" class="status"></p>
+          
+          <!-- 4. League Info and Export Buttons -->
+          <div id="league-info-section" class="league-info-section hidden">
+            <div class="league-summary">
+              <div class="league-details">
+                <span class="league-id">League ID: <strong id="displayed-league-id"></strong></span>
+                <span class="league-name" id="league-name"></span>
+              </div>
+              <div class="export-buttons">
+                <button id="export-btn" class="export-btn">
+                  <span class="export-icon">📥</span>
+                  Export Results
+                </button>
+                                          <button id="export-anonymous-btn" class="export-btn">
+                            <span class="export-icon">📥</span>
+                            Export anonymised data
+                          </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
 
-      <section id="league-meta" class="league-meta hidden">
-        <div>
-          <span class="meta-label">League:</span>
-          <span id="league-name" class="meta-value"></span>
+      <!-- Instructions Popup -->
+      <div id="instructions-popup" class="popup-overlay hidden">
+        <div class="popup-content">
+          <div class="popup-header">
+            <h3>How to Find Your League ID</h3>
+            <button id="close-popup" class="close-btn">&times;</button>
+          </div>
+          <div class="popup-body">
+            <div id="instructions-content">
+              <!-- Instructions content will be populated here -->
+            </div>
+          </div>
         </div>
-        <div>
-          <span class="meta-label">Draft time:</span>
-          <span id="league-draft-dt" class="meta-value"></span>
-        </div>
-        <div>
-          <span class="meta-label">Teams:</span>
-          <span id="league-team-count" class="meta-value"></span>
-        </div>
-        <div>
-          <span class="meta-label">Last updated:</span>
-          <span id="last-updated" class="meta-value"></span>
-        </div>
-      </section>
+      </div>
 
-      <section id="teams-grid" class="teams-grid"></section>
+      <!-- Teams Grid -->
+      <div id="teams-grid" class="teams-grid"></div>
 
-      <section id="recent-picks" class="recent-picks hidden">
-        <h2>Recent picks</h2>
-        <ol id="recent-picks-list"></ol>
-      </section>
-    </main>
+      <!-- Recent Picks -->
+      <div id="recent-picks" class="recent-picks-card hidden">
+        <div class="card-header">
+          <h3>👤 Recent Picks</h3>
+        </div>
+        <div class="table-container">
+          <table class="picks-table">
+            <thead>
+              <tr>
+                <th>Manager</th>
+                <th>Player Picked</th>
+              </tr>
+            </thead>
+            <tbody id="recent-picks-list">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="./app.js" defer></script>
   </body>
   </html>
