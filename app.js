@@ -74,12 +74,40 @@
     return res.json();
   }
 
+  function toUpstreamAbsolute(url) {
+    if (url.startsWith('/api/bootstrap-static')) {
+      return 'https://fantasy.premierleague.com/api/bootstrap-static/';
+    }
+    let m = url.match(/^\/api\/league\/(\d+)\/details/);
+    if (m) return `https://draft.premierleague.com/api/league/${m[1]}/details`;
+    m = url.match(/^\/api\/draft\/(\d+)\/choices/);
+    if (m) return `https://draft.premierleague.com/api/draft/${m[1]}/choices`;
+    return null;
+  }
+
   async function fetchJsonWithFallback(url) {
-    const urls = [url, ...CORS_PROXIES.map(p => buildProxyUrl(p, url))];
+    const urls = [];
+    const isRelative = url.startsWith('/');
+    if (isRelative) urls.push(url); // try same-origin Worker/Pages functions first
+    const absolute = isRelative ? toUpstreamAbsolute(url) : url;
+    if (absolute) {
+      urls.push(absolute);
+      for (const p of CORS_PROXIES) urls.push(buildProxyUrl(p, absolute));
+      // r.jina.ai mirrors responses with permissive CORS; add both http/https path styles
+      urls.push('https://r.jina.ai/http://' + absolute.replace(/^https?:\/\//, ''));
+      urls.push('https://r.jina.ai/https://' + absolute.replace(/^https?:\/\//, ''));
+    }
+
     let lastErr;
-    for (const u of urls) {
+    for (const candidate of urls) {
       try {
-        return await fetchJson(u);
+        if (candidate.startsWith('https://r.jina.ai/')) {
+          const res = await fetch(candidate, { cache: 'no-store', mode: 'cors' });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const text = await res.text();
+          return JSON.parse(text);
+        }
+        return await fetchJson(candidate);
       } catch (err) {
         lastErr = err;
       }

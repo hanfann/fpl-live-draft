@@ -1,0 +1,11 @@
+name = "fpl-live-draft-pages"
+main = "_worker.js"
+compatibility_date = "2024-10-01"
+
+[assets]
+directory = "."
+binding = "ASSETS"
+html_handling = "auto"
+not_found_handling = "none"
+
+
