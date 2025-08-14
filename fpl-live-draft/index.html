@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" data-theme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FPL Draft Live Tracker</title>
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="header-left"></div>
+        <div class="header-center">
+          <h1>FPL Draft Live Tracker</h1>
+          <p class="subtitle">Enter your Draft League ID to watch picks update live</p>
+        </div>
+        <div class="header-right">
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <section class="hero">
+        <div class="controls">
+          <form id="league-form" autocomplete="off">
+            <label for="league-id-input">League ID</label>
+            <input id="league-id-input" name="leagueId" type="number" inputmode="numeric" placeholder="e.g. 71675" required />
+            <button type="submit" class="cta">Start Tracking</button>
+          </form>
+          <p id="status" class="status"></p>
+        </div>
+      </section>
+
+      <section id="league-meta" class="league-meta hidden">
+        <div>
+          <span class="meta-label">League:</span>
+          <span id="league-name" class="meta-value"></span>
+        </div>
+        <div>
+          <span class="meta-label">Draft time:</span>
+          <span id="league-draft-dt" class="meta-value"></span>
+        </div>
+        <div>
+          <span class="meta-label">Teams:</span>
+          <span id="league-team-count" class="meta-value"></span>
+        </div>
+        <div>
+          <span class="meta-label">Last updated:</span>
+          <span id="last-updated" class="meta-value"></span>
+        </div>
+      </section>
+
+      <section id="teams-grid" class="teams-grid"></section>
+
+      <section id="recent-picks" class="recent-picks hidden">
+        <h2>Recent picks</h2>
+        <ol id="recent-picks-list"></ol>
+      </section>
+    </main>
+
+    <script src="./app.js" defer></script>
+  </body>
+  </html>
+
+
